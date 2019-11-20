@@ -16,13 +16,13 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
     #Generate word list (will be different for every trial):
         if type_of_test=='mixed':
             word_list=env.get_trial_set_mixed()
-        else:
-            word_list=env.get_trial_set_bocked()
+        else: 
+            word_list=env.get_trial_set_blocked()
 
         prev_word=None
         #Running the experiment:
         print("------------------------------------------------------------------")
-        print("Trial: ",trial_num )
+        print("Trial: ",trial_num+1 )
         print("Total number of words: ", len(word_list))
         print("------------------------------------------------------------------")
         print("\n")
@@ -78,4 +78,4 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
 
 
 if __name__=='__main__':
-    Experiment()
+    Experiment(type_of_test='block')

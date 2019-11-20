@@ -99,6 +99,7 @@ class Environment:
                     continue
                 
             block_pattern = block_pattern[1:]
+        return final_test_set
 
     
     def get_random_colour(self):
