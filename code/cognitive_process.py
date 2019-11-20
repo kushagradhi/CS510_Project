@@ -11,6 +11,7 @@ class Subject:
         self.decay_factor = decay_factor
         self.max_size_WM = num_of_chunks 
         self.filename='Micro-WNOp-data.txt'
+
         ## Short-term/Working memory parameters
         self.WM_response = []
         self.WM = [0] * self.max_size_WM   # working memory with num_of_chunk chunks
@@ -18,9 +19,9 @@ class Subject:
         self.current_size_WM = 0        # to keep record of the current number of words in the WM 
         self.current_colour_perceived = "blank"     # represents the current visual perception
         self.lexicon=read_data(self.filename)
-        self.mental_lexicon=test_subjects(self.lexicon)
+        
         ## Long-term memory parameters
-        self.LTM_lexicon = None
+        self.mental_lexicon=test_subjects(self.lexicon)     # individual lexicon with small alterations in scores to reflect personal experiences etc.
         self.LTM_known_colours = ["red", "blue", "yellow", "green", "orange", "brown", "cyan", "pink", "grey", "purple", 
                                 "ivory", "magenta", "fuscia", "hazel", "gold", "amber", 
                                 "cherry", "mahogany", "crimson", "scarlet", "mauve"]    

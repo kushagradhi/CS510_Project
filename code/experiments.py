@@ -1,7 +1,7 @@
 from environment import Environment
 from cognitive_process import Subject
 
-def experiment(type_of_test='mixed', number_of_trials=7):
+def Experiment(type_of_test='mixed', number_of_trials=7):
 
     word_count={'emo_neut':[0,0.0],'neut_emo':[0,0.0],'emo_emo':[0,0.0],'neut_neut':[0,0.0]}
 
@@ -35,7 +35,7 @@ def experiment(type_of_test='mixed', number_of_trials=7):
 
             if word in env.emotion_words:
                 word_type='Emotional word'
-            print("Word #" + str(i+1) + " : " + word  + " in font color " + color  + " [ " + word_type + " ] ")
+            print("Trial #" + str(trial_num+1) + " Word #" + str(i+1) + " : " + word[:-2]  + " in font color " + color  + " [ " + word_type + " ] ")
             #Test subject reads the word
             test_subject.read_display(word_list[i])
             #Time calculated for subject to respond
@@ -70,12 +70,12 @@ def experiment(type_of_test='mixed', number_of_trials=7):
     print("\n")
     print("Average response time (in seconds): ")
     print("------------------------------------------------------------------")
-    print("Pair of emotional words one after the other: " , word_count['emo_emo'][1]/word_count['emo_emo'][0])
-    print("Pair of neutral words one after the other: " , word_count['neut_neut'][1]/word_count['neut_neut'][0])
-    print("An emotional word followed by a neutral word: " , word_count['neut_emo'][1]/word_count['neut_emo'][0])
-    print("A neutral word followed by an emotional word : " , word_count['emo_neut'][1]/word_count['emo_neut'][0])
+    print("Emotion word | Emotion word : " , word_count['emo_emo'][1]/word_count['emo_emo'][0])
+    print("Neutral word | Emotion word : " , word_count['emo_neut'][1]/word_count['emo_neut'][0])
+    print("Emotion word | Neutral word : " , word_count['neut_emo'][1]/word_count['neut_emo'][0])
+    print("Neutral word | Neutral word : " , word_count['neut_neut'][1]/word_count['neut_neut'][0])
     
 
 
 if __name__=='__main__':
-    experiment()
+    Experiment()
