@@ -62,7 +62,7 @@ class Subject:
         if self.current_size_WM >= self.max_size_WM:
             self.WM=self.WM[1:]
             self.emotion_scores=self.emotion_scores[1:]
-            self.current_size_WM -=1
+            #self.current_size_WM -=1
         else:
             self.current_size_WM += 1
 

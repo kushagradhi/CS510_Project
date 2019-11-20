@@ -73,12 +73,7 @@ def test_subjects(sub_data):
 
 if __name__=='__main__':
     data=read_data('Micro-WNOp-data.txt')
-    print(data[0])
-    print('-----')
-    sub_data=test_subjects(data)
-    print(sub_data[0])
-    sub_data=test_subjects(data)
-    print(sub_data[0])
-    sub_data=test_subjects(data)
-    print(sub_data[0])
+    for i in range(0,20):
+        print(data[i])
+    
     

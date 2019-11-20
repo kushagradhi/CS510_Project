@@ -12,7 +12,12 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
     print("Test begins")
     # Running the trials:
     for trial_num in range(number_of_trials):
-    
+        test_subject.WM = [0] * test_subject.max_size_WM
+        test_subject.WM_response = []
+        test_subject.WM = [0] * test_subject.max_size_WM   # working memory with num_of_chunk chunks
+        test_subject.emotion_scores = [0] * test_subject.max_size_WM   # to keep a track of decaying emotional effect from words seen prior
+        test_subject.current_size_WM = 0        # to keep record of the current number of words in the WM 
+        test_subject.current_colour_perceived = "blank"
     #Generate word list (will be different for every trial):
         if type_of_test=='mixed':
             word_list=env.get_trial_set_mixed()
@@ -78,4 +83,4 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
 
 
 if __name__=='__main__':
-    Experiment(type_of_test='block')
+    Experiment(type_of_test='mixed',number_of_trials=7)
