@@ -33,14 +33,24 @@ def  read_data(filename):
     return data
     #print(data)
 
-#---- Function to generate lexicon for different subjects (people). The random factor this change does can be considered as an effect of the prior experiences of people. This manipulation is done to show the effect that a word can have a different level of emotional response (or lack of) based on their experience/genetics. For ex: someone could be more emotional towards the word 'cancer' as compared to another person.
+'''
+---- Function to generate lexicon for different subjects (people). The random factor this change does can be considered as an 
+effect of the prior experiences of people. This manipulation is done to show the effect that a word can have a different level of 
+emotional response (or lack of) based on their experience/genetics. For ex: someone could be more emotional towards the word 'cancer'
+ as compared to another person.
+'''
 def test_subjects(sub_data):
     # Generating a random number called bias by which the experiences of people varies
     bias=round(random.uniform(0,0.3),6)
     n=len(sub_data)
     #print(bias)
     for i in range(0,n):
-        #Generating a random factor by which the bias is split among the other two factors, i.e. If we are reducing the positive score of a word for a subject by 0.3, we want to add the 0.3 to the negative and neutral score. Instead of doing that split equally, we are using more randomization, that means the word could have a 0.25 effect added to the negative score and 0.05 effect to the neutral score for one person.
+        '''
+        Generating a random factor by which the bias is split among the other two factors, i.e. If we are reducing the positive score 
+        of a word for a subject by 0.3, we want to add the 0.3 to the negative and neutral score. Instead of doing that split equally, 
+        we are using more randomization, that means the word could have a 0.25 effect added to the negative score and 0.05 effect to 
+        the neutral score for one person.
+        '''
         s=random.randint(2,7)
 
         ##-- Subtracting the score from the positive and assigning to the neutral and negative split by a random factor

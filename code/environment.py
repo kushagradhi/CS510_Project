@@ -1,10 +1,10 @@
 import pickle, random
+from lexicon import read_data
 
 
 class Environment:
-    def __init__(self, lexicon_fname):
-        with open(lexicon_fname, 'rb') as f:
-            self.lexicon = pickle.load(f)       # list of lists, each sub list being [word, positive_score, negative_score, objective_score]
+    def __init__(self, lexicon_fname='Micro-WNOp-data.txt'):
+        self.lexicon=read_data(lexicon_fname)   # list of lists, each sub list being [word, positive_score, negative_score, objective_score]
         self.emotion_words, self.neutral_words = [], []            
         self.colours = ["red", "blue", "yellow", "green", "orange", 
                         "brown", "cyan", "pink", "grey", "purple"]  # font colour that will be randomly assigned to each word in the test set
@@ -18,10 +18,15 @@ class Environment:
         for l in self.lexicon:
             if l[1] >= class_threshold or l[2] >= class_threshold:
                 # self.emotion_words[l[0]] = l[1:]
-                self.emotion_words.append(l[0])
+                words=l[0].split(" ")
+                for w in words:
+                    self.emotion_words.append(w)
             else:
                 # self.neutral_words[l[0]] = l[1:]
-                self.neutral_words.append(l[0])
+                words=l[0].split(" ")
+                for w in words:
+                    self.neutral_words.append(w)
+                #self.neutral_words.append(l[0])
 
 
     def get_trial_set_mixed(self, num_of_words=30):
@@ -37,7 +42,7 @@ class Environment:
             i += 1
             group_picker = random.random()
             if group_picker >= 0.5:
-                emotion_word_index = random.randint(0,len(self.emotion_words))
+                emotion_word_index = random.randint(0,len(self.emotion_words)-1)
                 if self.emotion_words[emotion_word_index] in emotion_words_set:     # if randomly picked word being picked hasn't been picked in this round yet
                     emotion_words_set.remove(self.emotion_words[emotion_word_index])
                     font_colour_current_word = self.get_random_colour()
@@ -66,8 +71,8 @@ class Environment:
         Return a test set for Experiment Design - "blocked" (the stimuli are presented in separate blocks of trials defined by word valence)
         param num_of_words number of words to select for the test set
         '''
-
-        pass
+        final_test_set = []
+        return final_test_set
 
 
         
@@ -76,7 +81,7 @@ class Environment:
 
     
     def get_random_colour(self):
-        return self.colours[random.randint(0,len(self.colours))]
+        return self.colours[random.randint(0,len(self.colours)-1)]
 
 
     
