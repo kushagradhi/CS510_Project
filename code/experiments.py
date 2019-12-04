@@ -1,9 +1,57 @@
 from environment import Environment
 from cognitive_process import Subject
 
-def Experiment(type_of_test='mixed', number_of_trials=7):
 
-    word_count={'emo_neut':[0,0.0],'neut_emo':[0,0.0],'emo_emo':[0,0.0],'neut_neut':[0,0.0]}
+def cal_response_mixed(word_count,word,prev_word,emotion_words,response_time):
+         ###-- Calculating the scores to show effect of words
+    if word in emotion_words:
+        if prev_word in emotion_words:
+            word_count['emo_emo'][0]+=1
+            word_count['emo_emo'][1]+=response_time
+        else:
+            word_count['emo_neut'][0]+=1
+            word_count['emo_neut'][1]+=response_time
+    else:
+        if prev_word in emotion_words:
+            word_count['neut_emo'][0]+=1
+            word_count['neut_emo'][1]+=response_time
+        else:
+            word_count['neut_neut'][0]+=1
+            word_count['neut_neut'][1]+=response_time
+    
+    return word_count
+
+def print_mixed(word_count):
+
+    print("------------------------------------------------------------------")
+    print("\n")
+    print("Average response time (in seconds): ")
+    print("------------------------------------------------------------------")
+    print("Emotion word | Emotion word : " , word_count['emo_emo'][1]/word_count['emo_emo'][0])
+    print("Neutral word | Emotion word : " , word_count['emo_neut'][1]/word_count['emo_neut'][0])
+    print("Emotion word | Neutral word : " , word_count['neut_emo'][1]/word_count['neut_emo'][0])
+    print("Neutral word | Neutral word : " , word_count['neut_neut'][1]/word_count['neut_neut'][0])
+
+def print_block(word_count,block_pattern,block_size):
+    print("------------------------------------------------------------------")
+    print("\n")
+    print("Average response time (in seconds): ")
+    print("------------------------------------------------------------------")
+    for i in range(0,len(block_pattern)):
+        bname="Neutral"
+        if block_pattern[i].lower()=='e':
+            bname="Emotion"
+        print("Block " , i , " : ", bname, word_count[i]/block_size)
+        
+
+def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block_pattern="nen", block_size=10):
+
+    # Response time for mixed
+    if type_of_test=='mixed':
+        word_count={'emo_neut':[0,0.0],'neut_emo':[0,0.0],'emo_emo':[0,0.0],'neut_neut':[0,0.0]}
+    else:
+        #word_count=dict.fromkeys(range(num_of_words/block_size))
+        word_count={i:0 for i in range(int(num_of_words/block_size))}
 
     # Generate test subject
     test_subject=Subject()
@@ -31,6 +79,7 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
         print("Total number of words: ", len(word_list))
         print("------------------------------------------------------------------")
         print("\n")
+        block_num=0
         for i in range(0,len(word_list)):
             word_type='Neutral word'
             if i>0:
@@ -54,33 +103,26 @@ def Experiment(type_of_test='mixed', number_of_trials=7):
             print("Answer is " + str(val))
             print("------------------------------------------------------------------")
         
+            if type_of_test=='mixed':
+                if i>0:
+                    word_count=cal_response_mixed(word_count,word,prev_word,env.emotion_words,response_time)
+            
+            else:
+                if (i)%(block_size)==0 and (i)>0:
+                    print("Increment at ", i)
+                    block_num+=1
+                word_count[block_num]+=response_time
+                #word_count[block_num].append(response_time)
 
-            ###-- Calculating the scores to show effect of words
-            if i>0:  #Calculated only after the subject has read two words
-                if word in env.emotion_words:
-                    if prev_word in env.emotion_words:
-                        word_count['emo_emo'][0]+=1
-                        word_count['emo_emo'][1]+=response_time
-                    else:
-                        word_count['emo_neut'][0]+=1
-                        word_count['emo_neut'][1]+=response_time
-                else:
-                    if prev_word in env.emotion_words:
-                        word_count['neut_emo'][0]+=1
-                        word_count['neut_emo'][1]+=response_time
-                    else:
-                        word_count['neut_neut'][0]+=1
-                        word_count['neut_neut'][1]+=response_time
-    print("------------------------------------------------------------------")
-    print("\n")
-    print("Average response time (in seconds): ")
-    print("------------------------------------------------------------------")
-    print("Emotion word | Emotion word : " , word_count['emo_emo'][1]/word_count['emo_emo'][0])
-    print("Neutral word | Emotion word : " , word_count['emo_neut'][1]/word_count['emo_neut'][0])
-    print("Emotion word | Neutral word : " , word_count['neut_emo'][1]/word_count['neut_emo'][0])
-    print("Neutral word | Neutral word : " , word_count['neut_neut'][1]/word_count['neut_neut'][0])
-    
 
+
+    if type_of_test=='mixed':
+        print_mixed(word_count)   
+    else:
+        print_block(word_count,block_pattern,block_size)
 
 if __name__=='__main__':
-    Experiment(type_of_test='mixed',number_of_trials=7)
+
+    #default: num_of_words=30, block_pattern="nen", block_size=10
+
+    Experiment(type_of_test='mixed',number_of_trials=1)

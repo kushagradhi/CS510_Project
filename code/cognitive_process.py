@@ -2,7 +2,7 @@ from lexicon import read_data,test_subjects
 import time
 
 class Subject:
-    def __init__(self, num_of_chunks=7, decay_factor=2):
+    def __init__(self, num_of_chunks=7, decay_factor=3):
         '''
         param num_of_chunks number of chunks is working memory
         param decay_factor rate at which the effect of previous words decay in the subject's memory
