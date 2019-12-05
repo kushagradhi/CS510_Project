@@ -4,7 +4,7 @@ from lexicon import read_data
 
 class Environment:
     def __init__(self, lexicon_fname='Micro-WNOp-data.txt'):
-        self.lexicon=read_data(lexicon_fname)   # list of lists, each sub list being [word, positive_score, negative_score, objective_score]
+        self.lexicon = read_data(lexicon_fname)   # list of lists, each sub list being [word, positive_score, negative_score, objective_score]
         self.emotion_words, self.neutral_words = [], []            
         self.colours = ["red", "blue", "yellow", "green", "orange", 
                         "brown", "cyan", "pink", "grey", "purple"]  # font colour that will be randomly assigned to each word in the test set
@@ -104,6 +104,18 @@ class Environment:
     
     def get_random_colour(self):
         return self.colours[random.randint(0,len(self.colours)-1)]
+
+    def get_raw_word_score(self, word):
+        '''
+        Returns the emotion score associated with the word from the lexicon
+        '''
+        raw_word_score = 0
+        # lookup associated score from lexicon
+        for i in range(0,len(self.lexicon)):
+            if word in self.lexicon[i][0]:
+                raw_word_score= self.lexicon[i][1] + self.lexicon[i][2]
+                break
+        return raw_word_score
 
 
     
