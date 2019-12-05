@@ -2,7 +2,7 @@ from environment import Environment
 from cognitive_process import Subject
 from lexicon import read_data
 import matplotlib.pyplot as plt
-import time
+import time,sys
 
 def cal_response_mixed(word_count,word,prev_word,emotion_words,response_time):
          ###-- Calculating the scores to show effect of words
@@ -71,6 +71,23 @@ def plot_mixed(metrics):
        
 
 def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block_pattern="nen", block_size=10):
+
+    if number_of_trials<=0:
+        print("Error!!!")
+        sys.exit('Trials cannot be 0 or less than 0. Rerun program with correct inputs')
+    
+    if num_of_words<=0:
+        print("Error!!!")
+        sys.exit('Number of words in a trial cannot be 0 or less than 0. Rerun program with correct inputs')
+    
+    if type_of_test!='mixed':
+        if ( num_of_words%block_size)!=0:
+            print("Error!!!")
+            sys.exit('Number of words must be divisible by block size. Rerun program with correct inputs')
+        elif int(num_of_words/block_size)!=len(block_pattern):
+            print("Error!!!")
+            sys.exit('Number of blocks does not match pattern length. Rerun program with correct inputs')
+    
 
     # Response time for mixed
     if type_of_test=='mixed':
@@ -162,4 +179,4 @@ if __name__=='__main__':
 
     #default: num_of_words=30, block_pattern="nen", block_size=10
 
-    Experiment(type_of_test='mixed', num_of_words=30, number_of_trials=8)
+    Experiment(type_of_test='mixed')
