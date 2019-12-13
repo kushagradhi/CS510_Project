@@ -236,7 +236,8 @@ if __name__=='__main__':
     '''
     To run a mixed test, pass the parameter 'type_of_test' ='mixed'
     To run a block test, pass the parameter 'type_of_test'='block'
-    Variables that may/may not be set:
+    
+    Variables that can be changed:
     num_of_words: Number of words in a trial (default is 30)
     number_of_trials: Number of trials a participant goes through (default 4)
     block_size: Number of a words in a block for block pattern test (default 10)
