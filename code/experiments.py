@@ -39,11 +39,46 @@ def print_block(word_count,block_pattern,block_size):
     print("\n")
     print("Average response time (in seconds): ")
     print("------------------------------------------------------------------")
+    metrics=[]
     for i in range(0,len(block_pattern)):
         bname="Neutral"
         if block_pattern[i].lower()=='e':
             bname="Emotion"
+        metrics.append(word_count[i]/block_size)
         print("Block " , i , " : ", bname, word_count[i]/block_size)
+    #plot_block(metrics,block_pattern)
+
+
+def plot_block(metrics,block_pattern,block_size):
+    num_rows = int(len(metrics)/2) + len(metrics)%2
+    num_cols = 2 if len(metrics) >= 2 else 1
+    fig, axes = plt.subplots(figsize=(8*num_cols,8*num_rows), nrows=num_rows, ncols=num_cols, squeeze=False)
+    fig.subplots_adjust(hspace=0.75)
+    # fig.tight_layout()
+    trial = 0
+    for row in range(num_rows):    
+        for col in range(num_cols): 
+            word=metrics[trial][0]
+            raw=metrics[trial][1]
+            subj=metrics[trial][2]
+            for i in range(len(block_pattern)):
+                
+                #axes[row][col].bar(i+1,raw[i], color="#66c2a5")
+                #axes[row][col].bar(i+1,subj[i], color="#fc8d62")
+                axes[row][col].bar(i+1,word[i]/block_size ,color="#8da0cb")
+                axes[row][col].text(i+1,(word[i]/block_size)-0.1,str(round(word[i]/block_size,3)))
+            axes[row][col].set_xticks([i+1 for i in range(len(word))])
+            axes[row][col].set_xticklabels([x for x in block_pattern], fontsize=8)
+            axes[row][col].set_xlabel('block type')
+            axes[row][col].set_ylabel('Response time (s)')
+            axes[row][col].set_title('Trial' + str(trial+1))
+            #axes[row][col].legend(['response_time'], loc='upper left')
+            trial += 1
+            if trial >= len(metrics):
+                break
+
+    plt.savefig(str(time.time()) + ".png")  
+    plt.show()
 
 def plot_mixed(metrics):
     num_rows = int(len(metrics)/2) + len(metrics)%2
@@ -51,6 +86,7 @@ def plot_mixed(metrics):
     fig, axes = plt.subplots(figsize=(8*num_cols,8*num_rows), nrows=num_rows, ncols=num_cols, squeeze=False)
     # fig.tight_layout()
     trial = 0
+    fig.subplots_adjust(hspace=0.75)
     for row in range(num_rows):    
         for col in range(num_cols): 
             axes[row][col].plot([i+1 for i in range(len(metrics[trial]["stock_score"]))], metrics[trial]["stock_score"], color="#66c2a5")
@@ -59,7 +95,7 @@ def plot_mixed(metrics):
             axes[row][col].set_xticks([i+1 for i in range(len(metrics[trial]["stock_score"]))])
             axes[row][col].set_xticklabels(['N' if metrics[trial]["type"][w]==0 else 'E' for w in range(len(metrics[trial]["type"]))], fontsize=8)
             axes[row][col].set_xlabel('word type')
-            axes[row][col].set_ylabel('Scores and Response time')
+            axes[row][col].set_ylabel('Scores/time')
             axes[row][col].set_title('Trial' + str(trial+1))
             axes[row][col].legend(['stock_score', 'subject_score', 'response_time'], loc='upper left')
             trial += 1
@@ -70,7 +106,7 @@ def plot_mixed(metrics):
     plt.show()
        
 
-def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block_pattern="nen", block_size=10):
+def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=4, block_pattern="nen", block_size=10):
 
     if number_of_trials<=0:
         print("Error!!!")
@@ -97,6 +133,10 @@ def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block
     else:
         #word_count=dict.fromkeys(range(num_of_words/block_size))
         word_count = {i:0 for i in range(int(num_of_words/block_size))}
+        raw_count = {i:0 for i in range(int(num_of_words/block_size))}
+        subj_count = {i:0 for i in range(int(num_of_words/block_size))}
+        block_metric=[]
+
 
     # Generate test subject
     test_subject = Subject()
@@ -117,6 +157,9 @@ def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block
             word_list = env.get_trial_set_mixed(num_of_words)
         else: 
             word_list = env.get_trial_set_blocked()
+            word_count = {i:0 for i in range(int(num_of_words/block_size))}
+            raw_count = {i:0 for i in range(int(num_of_words/block_size))}
+            subj_count = {i:0 for i in range(int(num_of_words/block_size))}
 
         prev_word = None
         #Running the experiment:
@@ -164,16 +207,23 @@ def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=7, block
                     block_num += 1
                 word_count[block_num] += response_time
                 #word_count[block_num].append(response_time)
+                #[trial_num][block_num]["type"].append(1 if word_type == "Emotion word" else 0)
+                raw_count[block_num] +=env.get_raw_word_score(word)
+                subj_count[block_num] +=test_subject.get_raw_word_score(word)
+        
+        if type_of_test=="mixed":
+            print_mixed(word_count)   
+        else:
+            block_metric.append([word_count,raw_count,subj_count])
+            print_block(word_count,block_pattern,block_size)
 
     if type_of_test=="mixed":
         # print(metrics_record)
         plot_mixed(metrics_record)
-
-
-    if type_of_test=='mixed':
-        print_mixed(word_count)   
+        #print_mixed(word_count)   
     else:
-        print_block(word_count,block_pattern,block_size)
+        #print_block(word_count,block_pattern,block_size)
+        plot_block(block_metric,block_pattern, block_size)
 
 if __name__=='__main__':
 
