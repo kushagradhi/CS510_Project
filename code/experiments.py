@@ -4,6 +4,7 @@ from lexicon import read_data
 import matplotlib.pyplot as plt
 import time,sys
 
+# function calculating the scores for the mixed pattern test
 def cal_response_mixed(word_count,word,prev_word,emotion_words,response_time):
          ###-- Calculating the scores to show effect of words
     if word in emotion_words:
@@ -23,6 +24,7 @@ def cal_response_mixed(word_count,word,prev_word,emotion_words,response_time):
     
     return word_count
 
+# Function printing the scores for the mixed pattern test
 def print_mixed(word_count):
 
     print("------------------------------------------------------------------")
@@ -34,6 +36,7 @@ def print_mixed(word_count):
     print("Emotion word | Neutral word : " , word_count['neut_emo'][1]/word_count['neut_emo'][0])
     print("Neutral word | Neutral word : " , word_count['neut_neut'][1]/word_count['neut_neut'][0])
 
+# Function printing the block pattern test
 def print_block(word_count,block_pattern,block_size):
     print("------------------------------------------------------------------")
     print("\n")
@@ -48,7 +51,7 @@ def print_block(word_count,block_pattern,block_size):
         print("Block " , i , " : ", bname, word_count[i]/block_size)
     #plot_block(metrics,block_pattern)
 
-
+# Function printing the block pattern plots
 def plot_block(metrics,block_pattern,block_size):
     num_rows = int(len(metrics)/2) + len(metrics)%2
     num_cols = 2 if len(metrics) >= 2 else 1
@@ -80,6 +83,7 @@ def plot_block(metrics,block_pattern,block_size):
     plt.savefig(str(time.time()) + ".png")  
     plt.show()
 
+# Function printing the mixed pattern plots
 def plot_mixed(metrics):
     num_rows = int(len(metrics)/2) + len(metrics)%2
     num_cols = 2 if len(metrics) >= 2 else 1
@@ -105,7 +109,7 @@ def plot_mixed(metrics):
     plt.savefig(str(time.time()) + ".png")  
     plt.show()
        
-
+#Function running the experiments
 def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=4, block_pattern="nen", block_size=10):
 
     if number_of_trials<=0:
@@ -227,6 +231,15 @@ def Experiment(type_of_test='mixed',  num_of_words=30, number_of_trials=4, block
 
 if __name__=='__main__':
 
-    #default: num_of_words=30, block_pattern="nen", block_size=10
-
-    Experiment(type_of_test='mixed')
+    #default: num_of_words=30, block_pattern="nen", block_size=10 number of trials=4
+    
+    '''
+    To run a mixed test, pass the parameter 'type_of_test' ='mixed'
+    To run a block test, pass the parameter 'type_of_test'='block'
+    Variables that may/may not be set:
+    num_of_words: Number of words in a trial (default is 30)
+    number_of_trials: Number of trials a participant goes through (default 4)
+    block_size: Number of a words in a block for block pattern test (default 10)
+    block_pattern: pattern of block - 'nen' set for netural emotion neutral by default
+    '''
+    Experiment(type_of_test='mixed', num_of_words=30,number_of_trials=4)
